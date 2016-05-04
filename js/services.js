@@ -1,32 +1,22 @@
 'use strict';
 angular.module('cotabolo')
-.factory('DashboardService', function(){
+.factory('DashboardService', ['$firebaseArray', 'firebaseDataService', function($firebaseArray, firebaseDataService){
 	var service = {};
 
-	var participantes = [
-		{
-			nome: "Brunno",
-			posicao: 2,
-			previsaoPagamento: new Date()
-		},{
-			nome: "Fulano",
-			posicao: 1,
-			previsaoPagamento: new Date()
-		}
-	];
-
 	service.getParticipantes = function(){
-		return participantes;
+		return $firebaseArray(firebaseDataService.participantes);
 	}
 
 	service.incluirParticipante = function(participante){
 		participante.posicao = getUltimaPosicao();
 		participante.previsaoPagamento = new Date();
-		participantes.push(participante);
+		
+		service.getParticipantes().$add(participante);
 	}
 
 	function getUltimaPosicao(){
-		if(participantes){
+		var participantes = service.getParticipantes();
+		if(participantes && participantes.length > 0){
 			participantes.sort(function(a, b) {
 			    return parseFloat(b.posicao) - parseFloat(a.posicao);
 			});
@@ -37,4 +27,4 @@ angular.module('cotabolo')
 	}
 
 	return service;
-})
+}])
