@@ -1,5 +1,5 @@
 'use strict';
-angular.module('cotabolo', ['ngRoute', 'firebase','darthwade.dwLoading']);
+angular.module('cotabolo', ['ngRoute', 'firebase']);
 
 angular.module('cotabolo')
 .run(function($rootScope, $location) {
