@@ -1,0 +1,18 @@
+<div class="modal-header">
+	<h3 class="modal-title">Escolha de sabores</h3>
+</div>
+<div class="modal-body">
+	<form ng-submit="cadPagCtrl.ok()">
+		<div class="input-group animated fadeIn">
+			<input type="text" class="form-control finderBar" ng-model="searchTerm" placeholder="City, State..." autofocus>
+			<span class="input-group-btn">
+				<button class="btn btn-default" type="button" ng-click="cadPagCtrl.ok()">Go!</button>
+			</span>
+		</div>
+	</form>
+
+</div>
+<div class="modal-footer">
+	<button class="btn btn-primary" type="button" ng-click="cadPagCtrl.ok()">OK</button>
+	<button class="btn btn-warning" type="button" ng-click="cadPagCtrl.cancel()">Cancel</button>
+</div>

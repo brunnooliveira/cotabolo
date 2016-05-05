@@ -20,7 +20,8 @@ function firebaseDataService(FirebaseUrl) {
 
     var service = {
         root: root,
-        participantes: root.child('participantes')
+        participantes: root.child('participantes'),
+        sabores: root.child('sabores')
     };
 
     return service;

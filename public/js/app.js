@@ -1,5 +1,5 @@
 'use strict';
-angular.module('cotabolo', ['ngRoute', 'firebase']);
+angular.module('cotabolo', ['ngRoute', 'firebase', 'ui.bootstrap', 'angular-confirm']);
 
 angular.module('cotabolo')
 .run(function($rootScope, $location) {
@@ -20,8 +20,8 @@ angular.module('cotabolo')
 
 	$routeProvider.when('/cadastros', {
         templateUrl: 'partials/cadastros.html',
-        controller: 'DashboardController',
-        controllerAs: 'dbCtrl',
+        controller: 'CadastrosController',
+        controllerAs: 'cadCtrl',
         resolve: {
                 currentAuth: function(auth) {
                   return auth.$requireAuth();

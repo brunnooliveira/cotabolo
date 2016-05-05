@@ -14,7 +14,6 @@ angular.module('cotabolo')
         	"password": user.senha
       	})
       	.then(function(user) {
-        	console.log(user);
         	$location.path('/cadastros');
       	}, function(error) {
 	        if (error = 'INVALID_EMAIL') {
@@ -31,53 +30,11 @@ angular.module('cotabolo')
     }
 
 	self.logout = function(){
-		console.log("Logout");
 		auth.$unauth();
 		$location.path('/dashboard');
 	};
 
 	auth.$onAuth(function(authData) {
-      self.user = authData;
+      	self.user = authData;
     });
-}])
-
-.controller('DashboardController', ['DashboardService', '$loading', function(DashboardService, $loading){
-	var self = this;
-	var participantes,
-		participante,
-		exibirNovoParticipante = false;
-
-	self.prepararNovoParticipante = function(){
-		self.exibirNovoParticipante = true;
-		self.participante = {};
-	}
-
-	self.cancelarNovoParticipante = function(){
-		self.exibirNovoParticipante = false;	
-		self.participante = {};
-	}
-
-	self.salvarNovoParticipante = function(isValidForm, participante){
-		if(!isValidForm)
-			return;
-
-		console.log(participante);
-		DashboardService.incluirParticipante(participante);
-		self.exibirNovoParticipante = false;	
-		self.participante = {};
-	}
-
-	self.confirmarPagamento = function(participante){
-		if(participantes.length < 2)
-			return;
-
-		
-	}
-
-	function init(){
-		$loading.start('geral');
-		self.participantes = DashboardService.getParticipantes();
-	}
-
-	init();
 }]);

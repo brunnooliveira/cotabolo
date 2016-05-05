@@ -1,0 +1,9 @@
+{
+  "firebase": "cotaboloweb",
+  "public": "public",
+  "ignore": [
+    "firebase.json",
+    "**/.*",
+    "**/node_modules/**"
+  ]
+}
