@@ -1,3 +1,3 @@
 # cotabolo
 
-Projeto utilizado par o aprendizado do uso do AngularFire.
+Projeto utilizado par o aprendizado do uso de AngularFire.
