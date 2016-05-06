@@ -14,7 +14,7 @@
 				<div class="form-group" ng-class="{ 'has-error': novoPartcForm.email.$invalid}">
 					<label class="control-label" for="email">Email</label>
 				    <input type="email" class="form-control" id="email" placeholder="Email"
-				    	ng-model="cadCtrl.participante.email" name="email" ng-required="true">
+				    	ng-model="cadCtrl.participante.email" name="email" >
 				</div>
 				<button type="submit" class="btn btn-primary"
 					ng-click="cadCtrl.salvarNovoParticipante(novoPartcForm.$valid, cadCtrl.participante)">Salvar</button>
@@ -37,7 +37,6 @@
 				<thead>
 					<th>Posição</th>
 					<th>Nome</th>
-					<th>Email</th>
 					<th>Privisão Pagamento</th>
 					<th></th>
 				</thead>
@@ -45,7 +44,6 @@
 					<tr ng-repeat="participante in cadCtrl.participantes | orderBy:'posicao'">
 						<td>{{participante.posicao}}</td>
 						<td>{{participante.nome}}</td>
-						<td>{{participante.email}}</td>
 						<td>{{participante.previsaoPagamento | date:'dd/MM/yyyy'}}</td>
 						<td><span class="glyphicon glyphicon-trash" style="cursor:pointer;" 
 									ng-click="cadCtrl.inativarParticipante(participante)" ></span>
