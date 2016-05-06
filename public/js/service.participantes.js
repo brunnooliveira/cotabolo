@@ -1,6 +1,8 @@
 'use strict';
 angular.module('cotabolo')
-.factory('ParticipantesService', ['$firebaseArray', 'firebaseDataService', function($firebaseArray, firebaseDataService){
+.factory('ParticipantesService', ['$firebaseArray', 'firebaseDataService', 
+	function($firebaseArray, firebaseDataService){
+
 	var service = {};
 	var participantes = $firebaseArray(firebaseDataService.participantes.orderByChild('posicao'));
 
@@ -13,11 +15,11 @@ angular.module('cotabolo')
 	}
 
 	service.incluir = function(participante){
-		participante.posicao = getUltimoParticipante(participantes).posicao + 1;
-		var ultimoParticipante = getUltimoParticipante(participantes);
-		ordenarParticipantesPosicaoCrescente(participantes);
+		var ultimoParticipante = getUltimoParticipante(participantes);	
+		participante.posicao = (ultimoParticipante ? ultimoParticipante.posicao : 0) + 1;
+		
 		participante.previsaoPagamento = getProximaSexta(
-			ultimoParticipante
+			ultimoParticipante && ultimoParticipante.previsaoPagamento 
 				? new Date(ultimoParticipante.previsaoPagamento) 
 				: new Date())
 			.toJSON();
@@ -25,32 +27,42 @@ angular.module('cotabolo')
 	}
 
 	service.excluir = function(participante){
-		participantes.$remove(participante);
-		popularPrevisaoPagamento(participantes);
+		participantes.$remove(participante).then(function(){
+				popularPosicao(participantes);
+				popularPrevisaoPagamento(participantes);
+			});
+	}
+
+	service.moverUltimo = function(participante){
+		var ultimoParticipante = getUltimoParticipante(participantes);
+		var participanteUpdate = participantes.$getRecord(participante.$id);
+		if(ultimoParticipante && ultimoParticipante.posicao === participanteUpdate.posicao)
+			return;
+
+		participanteUpdate.posicao = (ultimoParticipante ? ultimoParticipante.posicao : 0) + 1;
+		participantes.$save(participanteUpdate);
+
+		participantes.push(participantes.shift());
+
 		popularPosicao(participantes);
+		popularPrevisaoPagamento(participantes);
 	}
 
 	function popularPosicao(participantes){
 		angular.forEach(participantes, function(participante, key){
-			participante.posicao = key + 1;
-			participantes.$save();
+			var participanteUpdate = participantes.$getRecord(participante.$id);
+			participanteUpdate.posicao = key + 1;
+			participantes.$save(participanteUpdate);
 		});
-	}
-
-	function ordenarParticipantesPosicaoCrescente(participantes){
-		if(participantes && participantes.length > 0){
-			participantes.sort(function(a, b) {
-			    return parseFloat(a.posicao) - parseFloat(b.posicao);
-			});
-		}
 	}
 
 	function getUltimoParticipante(participantes){
 		if(participantes && participantes.length > 0){
-			participantes.sort(function(a, b) {
+			var newArray = participantes.slice();
+			newArray.sort(function(a, b) {
 			    return parseFloat(b.posicao) - parseFloat(a.posicao);
 			});
-			return participantes[0];
+			return newArray[0];
 		}else{
 			return null;
 		}
@@ -61,7 +73,10 @@ angular.module('cotabolo')
 		var participanteIndex = 0;
 		for (var i = 0; i <= participantes.length * 7; i++) {
 			if(data.getDay() === 5){
-				participantes[participanteIndex].previsaoPagamento = new Date(data);
+				//var participante = participantes.$getRecord(participantes[participanteIndex].$id);
+				var participante = participantes.$getRecord(participantes[participanteIndex].$id);
+				participante.previsaoPagamento = new Date(data).toJSON();
+				participantes.$save(participante);
 				participanteIndex++;
 				if (participanteIndex === participantes.length) {
 					break;

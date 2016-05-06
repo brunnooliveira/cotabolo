@@ -9,13 +9,41 @@
 				<thead>
 					<th>Posição</th>
 					<th>Nome</th>
-					<th>Privisão Pagamento</th>
+					<th>Previsão Pagamento</th>
 				</thead>
 				<tbody>
 					<tr ng-repeat="participante in dbCtrl.participantes | orderBy:'posicao'">
 						<td>{{participante.posicao}}</td>
 						<td>{{participante.nome}}</td>
 						<td>{{participante.previsaoPagamento | date:'dd/MM/yyyy'}}</td>
+					</tr>
+				</tbody>
+
+			</table>
+		</div>
+	</div>
+</div>
+
+<div class="col-md-6">
+	<div class="panel panel-primary">
+		<div class="panel-heading">
+		    <h3 class="panel-title">Escolhas</h3>
+	  	</div>
+		<div class="panel-body">
+
+			<table class="table">
+				<thead>
+					<th>Participante</th>
+					<th>Médio</th>
+					<th>Pequeno</th>
+					<th>Data</th>
+				</thead>
+				<tbody>
+					<tr ng-repeat="escolha in dbCtrl.escolhas | orderBy:'data':true">
+						<td>{{escolha.participante.nome}}</td>
+						<td>{{escolha.saborMedio.descricao}}</td>
+						<td>{{escolha.saborPequeno.descricao}}</td>
+						<td>{{escolha.data | date:'dd/MM/yyyy  HH:mm'}}</td>
 					</tr>
 				</tbody>
 

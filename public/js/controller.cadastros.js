@@ -1,7 +1,7 @@
 'use strict';
 angular.module('cotabolo')
-.controller('CadastrosController', ['ParticipantesService', 'SaboresService', '$confirm', '$uibModal',
-	function(ParticipantesService, SaboresService, $confirm, $uibModal){
+.controller('CadastrosController', ['ParticipantesService', 'SaboresService', 'EscolhasService', '$confirm', '$uibModal',
+	function(ParticipantesService, SaboresService, EscolhasService, $confirm, $uibModal){
 	
 	var self = this;
 	var participantes,
@@ -36,21 +36,24 @@ angular.module('cotabolo')
 			animation: true,
 			templateUrl: 'partials/cadastros.pagamento.modal.html',
 			controller: 'CadastrosPagamentoController',
-			controllerAs: 'cadPagCtrl',
-			//size: size,
-			resolve: {
-				items: function () {
-					return [];
-				}
-			}
+			controllerAs: 'cadPagCtrl'
 		});
 
-		modalInstance.result.then(function (participante) {
-			console.log(participante);
+		modalInstance.result.then(function (escolha) {
+			if(escolha){
+				console.log(escolha);
+				self.confirmarEscolha(participante, escolha);
+			}
 		}, function () {
 			console.log('Modal dismissed at: ' + new Date());
 		});
 	};
+
+	self.confirmarEscolha = function(participante, escolha){
+		escolha.participante = participante;
+		EscolhasService.incluir(escolha);
+		ParticipantesService.moverUltimo(participante);
+	}
 
 	self.inativarParticipante = function(participante){
 		$confirm({
@@ -66,15 +69,6 @@ angular.module('cotabolo')
 			console.log('não excluir participante' + participante.nome);
 		});
 	}
-
-
-	self.confirmarPagamento = function(participante){
-		if(participantes.length < 2)
-			return;
-
-		
-	}
-
 
 	self.prepararNovoSabor = function(){
 		self.exibirNovoSabor = true;

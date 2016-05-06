@@ -9,14 +9,11 @@ angular.module('cotabolo')
   self.sabores;
 
   self.ok = function (escolha) {
-  	console.log('ok');
-  	console.log(escolha);
-    $uibModalInstance.close('ok');
+  	$uibModalInstance.close(escolha);
   };
 
   self.cancel = function () {
-  	console.log('cancel');
-    $uibModalInstance.dismiss('cancel');
+  	$uibModalInstance.dismiss('cancel');
   };
 
   function init(){
