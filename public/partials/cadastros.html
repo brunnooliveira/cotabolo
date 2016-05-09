@@ -5,19 +5,21 @@
 		    <h3 class="panel-title">Novo Participante</h3>
 	  	</div>
 		<div class="panel-body">
-			<ng-form name="novoPartcForm" role="form" >
-				<div class="form-group" ng-class="{ 'has-error': novoPartcForm.nome.$invalid}">
+			<ng-form name="cadCtrl.novoPartcForm" role="form" >
+				<div class="form-group" 
+					ng-class="{ 'has-error': cadCtrl.novoPartcForm.nome.$invalid && !cadCtrl.novoPartcForm.nome.$pristine}">
 					<label class="control-label" for="nome">Nome</label>
 				    <input type="text" class="form-control" id="nome" placeholder="Nome"
 				    	ng-model="cadCtrl.participante.nome" name="nome" ng-required="true">
 				</div>
-				<div class="form-group" ng-class="{ 'has-error': novoPartcForm.email.$invalid}">
+				<div class="form-group" 
+					ng-class="{ 'has-error': cadCtrl.novoPartcForm.email.$invalid && !cadCtrl.novoPartcForm.email.$pristine }">
 					<label class="control-label" for="email">Email</label>
 				    <input type="email" class="form-control" id="email" placeholder="Email"
 				    	ng-model="cadCtrl.participante.email" name="email" >
 				</div>
 				<button type="submit" class="btn btn-primary"
-					ng-click="cadCtrl.salvarNovoParticipante(novoPartcForm.$valid, cadCtrl.participante)">Salvar</button>
+					ng-click="cadCtrl.salvarNovoParticipante(cadCtrl.participante)">Salvar</button>
 				<button class="btn btn-danger" ng-click="cadCtrl.cancelarNovoParticipante()"
 					formnovalidate >Cancelar</button>
 			<ng-form>
@@ -66,15 +68,17 @@
 		    <h3 class="panel-title">Novo Sabor</h3>
 	  	</div>
 		<div class="panel-body">
-			<ng-form name="novoSaborForm" role="form" >
-				<div class="form-group" ng-class="{ 'has-error': novoSaborForm.descricao.$invalid}">
+			<ng-form name="cadCtrl.novoSaborForm" role="form" >
+				<div class="form-group" 
+					ng-class="{ 'has-error': cadCtrl.novoSaborForm.descricao.$invalid  
+						&& !cadCtrl.novoSaborForm.descricao.$pristine}">
 					<label class="control-label" for="descricao">Descrição</label>
 				    <input type="text" class="form-control" id="nome" placeholder="Descrição"
 				    	ng-model="cadCtrl.sabor.descricao" name="descricao" ng-required="true">
 				</div>
 				
 				<button type="submit" class="btn btn-primary" 
-					ng-click="cadCtrl.salvarNovoSabor(novoSaborForm.$valid, cadCtrl.sabor)">Salvar</button>
+					ng-click="cadCtrl.salvarNovoSabor(cadCtrl.sabor)">Salvar</button>
 				<button class="btn btn-danger" ng-click="cadCtrl.cancelarNovoSabor()"
 					formnovalidate >Cancelar</button>
 			<ng-form>

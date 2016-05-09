@@ -1,7 +1,7 @@
 'use strict';
 //CONTANTS
 angular.module('cotabolo')
-    .constant('FirebaseUrl', 'http://cotaboloweb.firebaseio.com');
+    .constant('FirebaseUrl', 'http://cotabolowebdesen.firebaseio.com');
 
 //AUTH SERVICE
 angular.module('cotabolo')

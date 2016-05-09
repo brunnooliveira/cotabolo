@@ -15,6 +15,7 @@ angular.module('cotabolo')
 	self.prepararNovoParticipante = function(){
 		self.exibirNovoParticipante = true;
 		self.participante = {};
+		self.novoPartcForm.$setPristine(true);
 	}
 
 	self.cancelarNovoParticipante = function(){
@@ -22,8 +23,8 @@ angular.module('cotabolo')
 		self.participante = {};
 	}
 
-	self.salvarNovoParticipante = function(isValidForm, participante){
-		if(!isValidForm)
+	self.salvarNovoParticipante = function(participante){
+		if(!self.novoPartcForm.$valid)
 			return;
 		
 		ParticipantesService.incluir(participante);
@@ -73,6 +74,7 @@ angular.module('cotabolo')
 	self.prepararNovoSabor = function(){
 		self.exibirNovoSabor = true;
 		self.sabor = {};
+		self.novoSaborForm.$setPristine(true);	
 	}
 
 	self.cancelarNovoSabor = function(){
@@ -80,13 +82,13 @@ angular.module('cotabolo')
 		self.sabor = {};
 	}
 
-	self.salvarNovoSabor = function(isValidForm, sabor){
-		if(!isValidForm)
+	self.salvarNovoSabor = function(sabor){
+		if(!self.novoSaborForm.$valid)
 			return;
 
 		SaboresService.incluir(sabor);
 		self.exibirNovoSabor = false;	
-		self.sabor = {};
+		self.sabor = {};	
 	}
 
 	function init(){
