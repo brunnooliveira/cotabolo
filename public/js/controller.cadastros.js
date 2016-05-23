@@ -98,7 +98,3 @@ angular.module('cotabolo')
 
 	init();
 }])
-
-.controller('CadastrosPagamentoController', function(){
-
-})
