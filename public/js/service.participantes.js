@@ -7,7 +7,9 @@ angular.module('cotabolo')
 	var participantes = $firebaseArray(firebaseDataService.participantes.orderByChild('posicao'));
 
 	participantes.$loaded().then(function(){
+		popularPosicao(participantes);
 		popularPrevisaoPagamento(participantes);
+		//ativarTodos();
 	})
 
 	service.listar = function(){
@@ -15,22 +17,36 @@ angular.module('cotabolo')
 	}
 
 	service.incluir = function(participante){
-		var ultimoParticipante = getUltimoParticipante(participantes);	
-		participante.posicao = (ultimoParticipante ? ultimoParticipante.posicao : 0) + 1;
-		
-		participante.previsaoPagamento = getProximaSexta(
-			ultimoParticipante && ultimoParticipante.previsaoPagamento 
-				? new Date(ultimoParticipante.previsaoPagamento) 
-				: new Date())
-			.toJSON();
-		participantes.$add(participante);
+		var ultimoParticipante = getUltimoParticipante(participantes);   
+    	participante.posicao = (ultimoParticipante ? ultimoParticipante.posicao : 0) + 1; 
+     
+		participante.ativo = true;
+		participantes.$add(participante).then(function(){
+			popularPosicao(participantes);
+			popularPrevisaoPagamento(participantes);
+		});
 	}
 
 	service.excluir = function(participante){
-		participantes.$remove(participante).then(function(){
-				popularPosicao(participantes);
-				popularPrevisaoPagamento(participantes);
-			});
+		var participanteUpdate = participantes.$getRecord(participante.$id);
+		participanteUpdate.ativo = false;
+		participanteUpdate.dataInativacao = new Date().toJSON();
+		participantes.$save(participanteUpdate).then(function(){
+			popularPosicao(participantes);
+			popularPrevisaoPagamento(participantes);	
+		});
+	}
+
+	service.reativar = function(participante){
+		var participanteUpdate = participantes.$getRecord(participante.$id);
+		var ultimoParticipante = getUltimoParticipante(participantes);   
+    	participanteUpdate.posicao = (ultimoParticipante ? ultimoParticipante.posicao : 0) + 1; 
+     
+		participanteUpdate.ativo = true;
+		participantes.$save(participanteUpdate).then(function(){
+			popularPosicao(participantes);
+			popularPrevisaoPagamento(participantes);
+		});
 	}
 
 	service.moverUltimo = function(participante){
@@ -40,19 +56,34 @@ angular.module('cotabolo')
 			return;
 
 		participanteUpdate.posicao = (ultimoParticipante ? ultimoParticipante.posicao : 0) + 1;
-		participantes.$save(participanteUpdate);
+		participantes.$save(participanteUpdate).then(function(){
+			participantes.push(participantes.shift());
+			popularPosicao(participantes);
+			popularPrevisaoPagamento(participantes);	
+		});
+	}
 
-		participantes.push(participantes.shift());
-
-		popularPosicao(participantes);
-		popularPrevisaoPagamento(participantes);
+	function ativarTodos(){
+		angular.forEach(participantes, function(participante, key){
+			console.log(participante);
+			var participanteUpdate = participantes.$getRecord(participante.$id);
+			participanteUpdate.ativo = true;
+			participantes.$save(participanteUpdate);
+		});
 	}
 
 	function popularPosicao(participantes){
+		var count = 0;
 		angular.forEach(participantes, function(participante, key){
 			var participanteUpdate = participantes.$getRecord(participante.$id);
-			participanteUpdate.posicao = key + 1;
+			if(participante.ativo){
+				participanteUpdate.posicao = count + 1;
+				count++;
+			}else{
+				participanteUpdate.posicao = 0;
+			}
 			participantes.$save(participanteUpdate);
+			
 		});
 	}
 
@@ -71,20 +102,21 @@ angular.module('cotabolo')
 	function popularPrevisaoPagamento(participantes){
 		var data = new Date();
 		var participanteIndex = 0;
-		for (var i = 0; i <= participantes.length * 7; i++) {
-			if(data.getDay() === 5){
-				//var participante = participantes.$getRecord(participantes[participanteIndex].$id);
-				var participante = participantes.$getRecord(participantes[participanteIndex].$id);
-				participante.previsaoPagamento = new Date(data).toJSON();
-				participantes.$save(participante);
-				participanteIndex++;
-				if (participanteIndex === participantes.length) {
-					break;
-				}
+		var participante;
+
+		for (var i = 0; i < participantes.length; i++) {
+			if(participantes[i].ativo){
+				console.log(participantes[i]);
+				data = getProximaSexta(data);
+				var participanteUpdate = participantes.$getRecord(participantes[i].$id);
+				participanteUpdate.previsaoPagamento = new Date(data).toJSON();
+				participantes.$save(participanteUpdate);
 			}
-			data.setDate(data.getDate() + 1);
-		}
+
+		};
 		return participantes;
+
+
 	}
 
 	function getProximaSexta(data){

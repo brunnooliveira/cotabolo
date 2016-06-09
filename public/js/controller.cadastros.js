@@ -59,16 +59,25 @@ angular.module('cotabolo')
 	self.inativarParticipante = function(participante){
 		$confirm({
 			title: 'Confirmação',
-			text: 'Deseja excluir o participante?',
+			text: 'Deseja inativar o participante?',
 			ok: 'Sim',
 			cancel: 'Não'
 		})
 		.then(function() {
-			console.log('excluir participante' + participante.nome);
 			ParticipantesService.excluir(participante);
-		}, function(){
-			console.log('não excluir participante' + participante.nome);
-		});
+		}, null);
+	}
+
+	self.reativarParticipante = function(participante){
+		$confirm({
+			title: 'Confirmação',
+			text: 'Deseja reativar o participante?',
+			ok: 'Sim',
+			cancel: 'Não'
+		})
+		.then(function() {
+			ParticipantesService.reativar(participante);
+		}, null);
 	}
 
 	self.prepararNovoSabor = function(){

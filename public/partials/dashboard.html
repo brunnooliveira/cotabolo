@@ -7,15 +7,15 @@
 
 			<table class="table">
 				<thead>
-					<th>Posição</th>
+					<th>Pos.</th>
 					<th>Nome</th>
-					<th>Previsão Pagamento</th>
+					<th>Prev. Pagamento</th>
 				</thead>
 				<tbody>
-					<tr ng-repeat="participante in dbCtrl.participantes | orderBy:'posicao'">
+					<tr ng-repeat="participante in dbCtrl.participantes | orderBy:'posicao' | filter:{ativo:true} ">
 						<td>{{participante.posicao}}</td>
 						<td>{{participante.nome}}</td>
-						<td>{{participante.previsaoPagamento | date:'dd/MM/yyyy'}}</td>
+						<td>{{participante.previsaoPagamento | date:'dd/MM/yy'}}</td>
 					</tr>
 				</tbody>
 
@@ -43,7 +43,33 @@
 						<td>{{escolha.participante.nome}}</td>
 						<td>{{escolha.saborMedio.descricao}}</td>
 						<td>{{escolha.saborPequeno.descricao}}</td>
-						<td>{{escolha.data | date:'dd/MM/yyyy  HH:mm'}}</td>
+						<td>{{escolha.data | date:'dd/MM/yy'}}</td>
+					</tr>
+				</tbody>
+
+			</table>
+		</div>
+	</div>
+</div>
+
+<div class="col-md-6">
+	<div class="panel panel-primary">
+		<div class="panel-heading">
+		    <h3 class="panel-title">Pagantes Inativos</h3>
+	  	</div>
+		<div class="panel-body">
+
+			<table class="table">
+				<thead>
+					<th>Pos.</th>
+					<th>Nome</th>
+					<th>Prev. Pagamento</th>
+				</thead>
+				<tbody>
+					<tr ng-repeat="participante in dbCtrl.participantes | orderBy:'dataInativacao' | filter:{ativo:false} ">
+						<td>{{participante.posicao}}</td>
+						<td>{{participante.nome}}</td>
+						<td>{{participante.dataInativacao | date:'dd/MM/yy'}}</td>
 					</tr>
 				</tbody>
 

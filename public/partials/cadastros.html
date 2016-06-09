@@ -39,20 +39,19 @@
 				<thead>
 					<th>Posição</th>
 					<th>Nome</th>
-					<th>Privisão Pagamento</th>
+					<th>Previsão Pagamento</th>
 					<th></th>
 				</thead>
 				<tbody>
-					<tr ng-repeat="participante in cadCtrl.participantes | orderBy:'posicao'">
+					<tr ng-repeat="participante in cadCtrl.participantes | orderBy:'posicao' | filter:{ativo:true} ">
 						<td>{{participante.posicao}}</td>
 						<td>{{participante.nome}}</td>
-						<td>{{participante.previsaoPagamento | date:'dd/MM/yyyy'}}</td>
-						<td><span class="glyphicon glyphicon-trash" style="cursor:pointer;" 
+						<td>{{participante.previsaoPagamento | date:'dd/MM/yy'}}</td>
+						<td><span class="glyphicon glyphicon-trash" style="cursor:pointer;" uib-tooltip="Inativar"
 									ng-click="cadCtrl.inativarParticipante(participante)" ></span>
 
-							<span class="glyphicon glyphicon-shopping-cart" style="cursor:pointer;" 
-									ng-click="cadCtrl.prepararPagamentoParticipante(participante)" 
-									ng-show="participante.posicao === 1"></span></td>
+							<span class="glyphicon glyphicon-shopping-cart" style="cursor:pointer;" uib-tooltip="Escolher sabores"
+									ng-click="cadCtrl.prepararPagamentoParticipante(participante)" ></span></td>
 					</tr>
 				</tbody>
 
@@ -103,7 +102,7 @@
 					<tr ng-repeat="sabor in cadCtrl.sabores | orderBy:'descricao'">
 						<td>{{sabor.descricao}}</td>
 						<td><span class="glyphicon glyphicon-trash" style="cursor:pointer;" 
-									ng-click="cadCtrl.inativarSabor(sabor)" ></span></td>
+									ng-click="cadCtrl.inativarSabor(sabor)" uib-tooltip="Inativar" ></span></td>
 					</tr>
 				</tbody>
 
@@ -111,4 +110,34 @@
 		</div>
 	</div>
 </div>
+
+<div class="col-md-6">
+	<div class="panel panel-primary">
+		<div class="panel-heading">
+		    <h3 class="panel-title">Pagantes Inativos</h3>
+	  	</div>
+		<div class="panel-body">
+
+			<table class="table">
+				<thead>
+					<th>Posição</th>
+					<th>Nome</th>
+					<th>Inativação</th>
+					<th></th>
+				</thead>
+				<tbody>
+					<tr ng-repeat="participante in cadCtrl.participantes | orderBy:'dataInativacao' | filter:{ativo:false} ">
+						<td>{{participante.posicao}}</td>
+						<td>{{participante.nome}}</td>
+						<td>{{participante.dataInativacao | date:'dd/MM/yy HH:mm'}}</td>
+						<td><span class="glyphicon glyphicon-ok" style="cursor:pointer;" uib-tooltip="Reativar"
+									ng-click="cadCtrl.reativarParticipante(participante)" ></span>
+					</tr>
+				</tbody>
+
+			</table>
+		</div>
+	</div>
+</div>
+
 <form>
