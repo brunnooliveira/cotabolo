@@ -57,7 +57,7 @@ angular.module('cotabolo')
 
 		participanteUpdate.posicao = (ultimoParticipante ? ultimoParticipante.posicao : 0) + 1;
 		participantes.$save(participanteUpdate).then(function(){
-			participantes.push(participantes.shift());
+			//participantes.push(participantes.shift());
 			popularPosicao(participantes);
 			popularPrevisaoPagamento(participantes);	
 		});
